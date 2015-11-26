@@ -1,0 +1,37 @@
+sudo mkdir -p /var/www/nikdiary.com/public_html
+sudo chown -R hduser:hadoop /var/www/nikdiary.com/public_html
+sudo chmod -R 755 /var/www
+sudo vi /var/www/nikdiary.com/public_html/index.html
+
+<html>
+  <head>
+    <title>Welcome to nikdiary.com!</title>
+  </head>
+  <body>
+    <h1>Success!  The nikdiary.com virtual host is working!</h1>
+  </body>
+</html>
+
+
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/nikdiary.com.conf
+
+
+sudo vi /etc/apache2/sites-available/nikdiary.com.conf
+
+<VirtualHost *:80>
+    ServerAdmin nikhilbh@mail.com
+    ServerName nikdiary.com
+    ServerAlias www.nikdiary.com
+    DocumentRoot /var/www/nikdiary.com/public_html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo a2ensite nikdiary.com.conf
+
+sudo service apache2 restart
+
+sudo vi /etc/hosts
+
+127.0.1.1   nikdiary.com
+

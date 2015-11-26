@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>Diary login page</title>
+
+<link rel="stylesheet" type="text/css" href="css/diary.css">
+<script type="text/javascript" src="scripts/jquery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#login').on('click', function() {
+		var isValid = 0;
+		console.log('Login :: '+$('#user').val().length +',  '+$('#password').val().length);
+		
+		if($('#user').val().length == 0) {
+			addError(true, $('#user'));
+		} else {
+			addError(false, $('#user'));
+			isValid++;
+		}
+		
+		if($('#password').val().length == 0) {
+			addError(true, $('#password'));
+		} else {
+			addError(false, $('#password'));
+			isValid++;
+		}
+		
+		if(isValid == 2) {
+			document.forms[0].submit();
+		}
+	});
+});
+
+function addError(isErr, $this) {
+	if(isErr) {
+		$this.removeClass('flatText');
+		$this.addClass('txtError');
+	} else {
+		$this.removeClass('txtError');
+		$this.addClass('flatText');
+	}
+}
+</script>
+</head>
+<body>
+	<form action="login.php" method="POST" name="login">
+		<table style="width: 25%">
+			<tr>
+				<td>User ID : </td>
+				<td><input type="text" class="flatText" value="" name="user" id="user"/></td>
+			</tr>
+			<tr>
+				<td>Password : </td>
+				<td><input type="password" class="flatText" id="password" name="password" value="" /></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+					<input type="button" value="Login" id="login" />&nbsp;&nbsp;
+					<input type="reset" value="Reset" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
