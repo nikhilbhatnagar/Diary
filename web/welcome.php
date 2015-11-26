@@ -1,36 +1,23 @@
 <?php
 
-// Start the session
-session_start();
-
-$user = $_SESSION["user"];
-$usrRole = $_SESSION["role"];
-
-if(empty($user) || empty($usrRole)) {
-	header( "Location: login.html" );	
-}
-
-if($usrRole == 'ADMIN') {
-	echo "Welcome Admin " .htmlentities($user) . "<br/><br/>";
-} else {
-	echo "Welcome " .htmlentities($user) . "<br/><br/>";
-}
+include_once("header.php");
 
 //including the database connection file
 include_once("config.php");
+
 
 //fetching data in descending order (lastest entry first)
 $result = mysqli_query($conn, "SELECT * FROM T_DIARY WHERE USER_NAME = '" .$user ."' ORDER BY DATE DESC");
 
 ?>
 
-<html>
+<html> 
 <head>	
 	<title>My Diary</title>
 </head>
 
 <body>
-<a href="add.html">Add your today's activity</a><br/><br/>
+<a href="newEntry.php">Add your today's activity</a><br/><br/>
 
 	<table style="width: 80%;">
 
@@ -51,7 +38,7 @@ $result = mysqli_query($conn, "SELECT * FROM T_DIARY WHERE USER_NAME = '" .$user
 		echo "</tr>";
 	}
 	
-	while($res = mysql_fetch_array($result)) { 		
+	while($res = mysqli_fetch_array($result)) { 		
 		echo "<tr>";
 			echo "<td>".$res['DATE']."</td>";
 			echo "<td>".$res['SUBJECT']."</td>";
