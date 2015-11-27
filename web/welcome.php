@@ -6,9 +6,13 @@ include_once("header.php");
 include_once("config.php");
 
 
-//fetching data in descending order (lastest entry first)
-$result = mysqli_query($conn, "SELECT * FROM T_DIARY WHERE USER_NAME = '" .$user ."' ORDER BY DATE DESC");
-
+	//fetching data in descending order (lastest entry first)
+	$query = "SELECT d.DATE, d.SUBJECT, d.CONTENT, f.FEELTING_TYPE, t.TAG_NAME, d.ATTACHMENT "
+			 ."FROM T_DIARY d, T_FEELING f, T_TAG t "
+			 ."WHERE d.FEELING = f.FEELING_ID and d.TAG = t.TAG_ID "
+			 ."AND USER_NAME = '" .$user ."' ORDER BY DATE DESC";
+	
+	$result = mysqli_query($conn, $query);
 ?>
 
 <html> 
@@ -22,11 +26,11 @@ $result = mysqli_query($conn, "SELECT * FROM T_DIARY WHERE USER_NAME = '" .$user
 	<table style="width: 80%;">
 
 	<tr bgcolor='#CCCCCC'>
-		<td style="width: 10%;">Date</td>
+		<td style="width: 15%;">Date</td>
 		<td style="width: 20%;">Subject</td>
 		<td style="width: 5%;">Feeling</td>
 		<td style="width: 5%;">Tag</td>
-		<td style="width: 40%;">Content</td>
+		<td style="width: 35%;">Content</td>
 		<td style="width: 10%;">Attachment(s)</td>
 		<td style="width: 10%;">&nbsp;</td>
 	</tr>
@@ -40,13 +44,13 @@ $result = mysqli_query($conn, "SELECT * FROM T_DIARY WHERE USER_NAME = '" .$user
 	
 	while($res = mysqli_fetch_array($result)) { 		
 		echo "<tr>";
-			echo "<td>".$res['DATE']."</td>";
+			echo "<td>".date_format(new DateTime($res['DATE']), 'd/m/Y H:i:s') ."</td>";
 			echo "<td>".$res['SUBJECT']."</td>";
-			echo "<td>".$res['FEELING']."</td>";	
-			echo "<td>".$res['TAG']."</td>";
+			echo "<td>".$res['FEELTING_TYPE']."</td>";	
+			echo "<td>".$res['TAG_NAME']."</td>";
 			echo "<td>".$res['CONTENT']."</td>";
-			echo "<td>".$res['ATTACHMENT_ID']."</td>";
-			echo "<td><a href=\"edit.php?id=$res[id]\">Edit</a> | <a href=\"delete.php?id=$res[id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a></td>";
+			echo "<td>".$res['ATTACHMENT']."</td>";
+			echo "<td><a href=\"edit.php?id=$res[DIARY_ID]\">Edit</a> | <a href=\"delete.php?id=$res[DIARY_ID]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a></td>";
 		echo "</tr>";
 	}
 	

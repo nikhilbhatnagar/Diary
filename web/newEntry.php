@@ -9,8 +9,37 @@
 	
 	<script type="text/javascript" src="scripts/jquery.js"></script>
 	<script type="text/javascript">
+		var isValid = 0;
+	
 		$(document).ready(function() {
 			getDropDownValues();
+
+			$('#addRecord').on('click', function() {
+				if($('#date').val().length == 0) {
+					addError(true, $('#date'));
+				} else {
+					addError(false, $('#date'));
+					isValid++;
+				}
+
+				if($('#subject').val().length == 0) {
+					addError(true, $('#subject'));
+				} else {
+					addError(false, $('#subject'));
+					isValid++;
+				}
+
+				if($('#content').val().length == 0) {
+					addError(true, $('#content'));
+				} else {
+					addError(false, $('#content'));
+					isValid++;
+				}
+
+				if(isValid == 3) {
+					document.forms[0].submit();
+				}
+			});
 		});
 
 		function getDropDownValues() {
@@ -22,11 +51,11 @@
 					$newDiv.html(data);
 					
 					if($(data).find('FEELINGS').attr('count') != '0') {
-						$('#feelingTD').html('<select>' +$newDiv.find('FEELINGS').html() +'</select>');
+						$('#feelingTD').html('<select name="feeling"><option>&nbsp;</option>' +$newDiv.find('FEELINGS').html() +'</select>');
 					}
 
 					if($(data).find('TAGS').attr('count') != '0') {
-						$('#tagTD').html('<select>' +$newDiv.find('TAGS').html() +'</select>');
+						$('#tagTD').html('<select name="tag"><option>&nbsp;</option>' +$newDiv.find('TAGS').html() +'</select>');
 					}
 				  },
 				  error: function(e) {
@@ -35,6 +64,16 @@
 					alert('Error : '+e.message);
 				  }
 				});
+		}
+
+		function addError(isErr, $this) {
+			if(isErr) {
+				$this.removeClass('flatText');
+				$this.addClass('txtError');
+			} else {
+				$this.removeClass('txtError');
+				$this.addClass('flatText');
+			}
 		}
 	</script>
 </head>
@@ -47,7 +86,7 @@
 		<table style="width: 50%;">
 			<tr> 
 				<td>Date</td>
-				<td><input type="date" name="date" id="date" class="flatText" /></td>
+				<td><input type="datetime-local" name="date" id="date" class="flatText" /></td>
 			</tr>
 			<tr> 
 				<td>Subject</td>
@@ -67,7 +106,7 @@
 			</tr>
 			<tr> 
 				<td>Attachments</td>
-				<td id="attachmentTD"><input type="file"></input></td>
+				<td id="attachmentTD"><input type="file" name="attachment"></input></td>
 			</tr>
 			<tr> 
 				<td>&nbsp;</td>
@@ -75,7 +114,7 @@
 			</tr>
 			<tr> 
 				<td>&nbsp;</td>
-				<td><input type="submit" name="Submit" value="Add"></td>
+				<td><input type="button" name="Submit" value="Add" id="addRecord"></td>
 			</tr>
 		</table>
 	</form>
